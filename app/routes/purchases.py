@@ -1,6 +1,10 @@
 # app/routes/purchases.py
-from fastapi import APIRouter, Depends, HTTPException
+import io
+import csv
+from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
+import pandas as pd
 from .. import models, schemas, database
 
 router = APIRouter(prefix="/purchases", tags=["Purchases"])
@@ -66,3 +70,13 @@ def delete_purchase(purchase_id: int, db: Session = Depends(get_db)):
     db.delete(purchase)
     db.commit()
     return {"deleted": purchase_id}
+
+# --- Экспорт CSV ---
+@router.get("/export/csv", response_class=StreamingResponse, tags=["Purchases"])
+def export_csv(db: Session = Depends(get_db)):
+    ...
+
+# --- Экспорт Excel ---
+@router.get("/export/excel", response_class=StreamingResponse, tags=["Purchases"])
+def export_excel(db: Session = Depends(get_db)):
+    ...
